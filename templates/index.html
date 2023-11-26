@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Neo4j</title>
+</head>
+<body>
+    <h1>Consulta Neo4j</h1>
+    <form action="/execute_query" method="post">
+        <label for="query">Consulta Neo4j:</label>
+        <textarea id="query" name="query" rows="4" cols="50"></textarea>
+        <br>
+        <button type="submit">Ejecutar Consulta</button>
+    </form>
+    <hr>
+    <h2>Resultados:</h2>
+    {% for result in results %}
+        <p>{{ result['title'] }}</p>
+        <img src="{{ result['poster'] }}" alt="{{ result['title'] }} Poster" width="200">
+        <hr>
+    {% endfor %}
+</body>
+</html>
