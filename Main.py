@@ -17,24 +17,27 @@ class Neo4jConnection:
             self._driver.close()
 
     def connect(self):
-        self._driver = GraphDatabase.driver(self._uri, auth=(self._user, self._password))
+        self._driver = GraphDatabase.driver(
+            self._uri, auth=(self._user, self._password)
+        )
         return self._driver
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/test')
+
+@app.route("/test")
 def test():
-    return render_template('app_layout__simpler.html')
+    return render_template("app_layout__simpler.html")
 
-@app.route('/test_nested', methods=['GET', 'POST'])
+
+@app.route("/test_nested", methods=["GET", "POST"])
 def test_nested():
-<<<<<<< HEAD
-    if request.method == 'POST':
-        genre = request.form.get('genre', '')
-        title = request.form.get('title', '')
+    if request.method == "POST":
+        genre = request.form.get("genre", "")
+        title = request.form.get("title", "")
 
         if genre:
             # Realiza la búsqueda por género
@@ -51,40 +54,47 @@ def test_nested():
                 "RETURN m.title, m.poster"
             )
 
-        connection = Neo4jConnection("bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain")
+        connection = Neo4jConnection(
+            "bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain"
+        )
 
         with connection.connect() as driver:
             with driver.session() as session:
                 if genre or title:
                     result = session.run(cypher_query, genre=genre, title=title)
-                    results = [{"title": record["m.title"], "poster": record["m.poster"]} for record in result]
+                    results = [
+                        {"title": record["m.title"], "poster": record["m.poster"]}
+                        for record in result
+                    ]
                 else:
                     results = []
 
         connection.close()
 
-        return render_template('app_layout.html', results=results)
+        return render_template("app_layout.html", results=results)
 
-    return render_template('app_layout.html', results=None)
-=======
-    return render_template('app_layout.html')
->>>>>>> fd13fdd4ee0399eef2ecd9ef3551d8dc336bf4a3
+    return render_template("app_layout.html", results=None)
 
 
-@app.route('/execute_query', methods=['POST'])
+@app.route("/execute_query", methods=["POST"])
 def execute_query():
-    query = flask.request.form['query']
-    connection = Neo4jConnection("bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain")
+    query = flask.request.form["query"]
+    connection = Neo4jConnection(
+        "bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain"
+    )
 
     with connection.connect() as driver:
         with driver.session() as session:
             result = session.run(query)
-            results = [{"title": record["title"], "poster": record["posterURL"]} for record in result]
+            results = [
+                {"title": record["title"], "poster": record["posterURL"]}
+                for record in result
+            ]
 
     connection.close()
 
-    return render_template('index.html', results=results)
+    return render_template("index.html", results=results)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
