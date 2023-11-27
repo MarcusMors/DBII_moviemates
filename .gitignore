@@ -5,6 +5,7 @@ mock
 
 # text editors and IDEs
 .vscode
+.trunk
 
 #===========================================================================
 # gitignore made for python

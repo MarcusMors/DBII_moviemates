@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{%block title%}{%endblock%}</title>
+  {%block head%}
+  <meta charset="UTF-8" />
+  <meta name="description" content="" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- <link rel="icon" href="../assets/icon.png" /> -->
+  <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}" />
+
+  <link href="https://fonts.googleapis.com/css2" />
+  <script src="https://kit.fontawesome.com/1b04830cf2.js" crossorigin="anonymous"></script>
+  {%endblock%}
+  <link rel="stylesheet" href="{{url_for('static', filename='css/layout_simple.css')}}" />
+  {%block css%}{%endblock%}
+</head>
+
+<style>
+  /* Style for the dropdown */
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-content {
+      display: block;
+  }
+</style>
+
+<body class="container">
+  <!-- HEADER -->
+
+  <div class="header">
+    <span><div href="/" class="logo_container">
+      <img href="/" class="logo" src="{{url_for('static', filename='assets/logo.png')}}" alt="MovieMate Logo">
+      <span href="/" class="logo_text">MovieMate</span>
+    </div></span>
+    <span><a href="#">My Movies</a></span>
+    <span><a href="#">Browse</a></span>
+    <span><a href="#">Community</a></span>
+
+    <div class="search-box">
+      <input name="name" type="text" placeholder="Search Movies" />
+      <button type="submit" class="search-btn">
+        <i class="fas fa-search" style="color: white"></i>
+      </button>
+    </div>
+    <!-- <nav placeholder="Search books">
+    </nav> -->
+    <!-- Profile Dropdown -->
+    <div class="dropdown">
+        <span>Profile</span>
+        <div class="dropdown-content">
+          <ul>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Friends</a></li>
+            <li><a href="#">Log Out</a></li>
+          </ul>
+        </div>
+    </div>
+    {%block header%}{%endblock%}
+  </div>
+  <!-- SIDEBAR -->
+  <div class="menu">
+    {%block sidebar%}
+    <div>Currently watching
+
+      <div>
+        <!-- query -->
+        <span>View all movies</span>
+        <span>Add movie</span>
+        <span>General Update</span>
+      </div>
+    </div>
+
+    <div>
+      Movie challenge
+      <!-- generic bar of movies_watched/number -->
+    </div>
+    <div>
+      Want to Watch
+      <!-- Query -->
+    </div>
+    <h2>Categorias</h2>
+    <!-- in ul -->
+    <!-- query de categorias -->
+
+    {%endblock%}
+  </div>
+  <!-- CONTENIDO -->
+
+  <div class="main">
+    {%block content%}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempus nibh a condimentum gravida. Donec
+      accumsan ipsum ac tincidunt scelerisque. Integer maximus malesuada vulputate. Mauris cursus enim nec vulputate
+      rhoncus. Fusce eu dignissim enim. Phasellus dictum varius justo a accumsan. Donec bibendum varius pretium.
+      Suspendisse aliquam vulputate lorem eu fermentum. Sed blandit porttitor ex ut laoreet. Nulla laoreet velit sed
+      dolor feugiat, ut condimentum felis tincidunt. Donec pretium est eget neque ultricies, eu vehicula felis
+      condimentum. Aenean bibendum eu felis nec tincidunt. Aenean scelerisque dictum sollicitudin. Sed lacinia
+      ullamcorper velit, id volutpat nunc vestibulum sed.</p>
+    {%endblock%}
+    <div class="contents">
+      <div id="insert_guide" class="products"></div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div>
+      Recommendations
+    </div>
+    <p>This is the sidebar.</p>
+  </div>
+
+  <div class="footer"id="load_signal">
+    <span>
+      <div href="/" class="logo_container">
+        <img href="/" class="logo" src="{{url_for('static', filename='assets/logo.png')}}" alt="MovieMate Logo">
+        <span href="/" class="logo_text">MovieMate</span>
+      </div>
+    </span>
+    <ul>
+      <li>About us</li>
+      <li>Community</li>
+      <li>Work with us</li>
+      <li>Terms</li>
+      <li>Privacy</li>
+    </ul>
+    <ul>
+      <li>Facebook</li>
+      <li>Instagram</li>
+      <li>Twitter</li>
+      <li>LinkedIn</li>
+    </ul>
+  </div>
+</body>
+
+<script src="{{url_for('static', filename='js/infinite_loop.js')}}"></script>
+
+<!-- <script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+</script> -->
+
+</html>
