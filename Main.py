@@ -1,5 +1,5 @@
 import flask
-from flask import render_template
+from flask import render_template, request
 from neo4j import GraphDatabase
 
 app = flask.Flask(__name__)
@@ -29,10 +29,42 @@ def index():
 def test():
     return render_template('layout__simpler.html')
 
-@app.route('/test_nested')
+@app.route('/test_nested', methods=['GET', 'POST'])
 def test_nested():
-    # return render_template('layout__nested.html')
-    return render_template('app_layout.html')
+    if request.method == 'POST':
+        genre = request.form.get('genre', '')
+        title = request.form.get('title', '')
+
+        if genre:
+            # Realiza la búsqueda por género
+            cypher_query = (
+                "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
+                "WHERE toLower(g.name) STARTS WITH toLower($genre) "
+                "RETURN m.title, m.poster"
+            )
+        elif title:
+            # Realiza la búsqueda por título
+            cypher_query = (
+                "MATCH (m:Movie) "
+                "WHERE toLower(m.title) CONTAINS toLower($title) "
+                "RETURN m.title, m.poster"
+            )
+
+        connection = Neo4jConnection("bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain")
+
+        with connection.connect() as driver:
+            with driver.session() as session:
+                if genre or title:
+                    result = session.run(cypher_query, genre=genre, title=title)
+                    results = [{"title": record["m.title"], "poster": record["m.poster"]} for record in result]
+                else:
+                    results = []
+
+        connection.close()
+
+        return render_template('app_layout.html', results=results)
+
+    return render_template('app_layout.html', results=None)
 
 
 @app.route('/execute_query', methods=['POST'])
