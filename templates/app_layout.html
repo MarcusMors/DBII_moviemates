@@ -14,15 +14,18 @@
 
   <link href="https://fonts.googleapis.com/css2" />
   <script src="https://kit.fontawesome.com/1b04830cf2.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='css/layout.css')}}" />
   {%endblock%}
+  <link rel="stylesheet" href="{{url_for('static', filename='css/layout.css')}}" />
   {%block css%}{%endblock%}
 </head>
 
 <body class="hg">
 
   <header class="hg-header">
+    <div class="logo_container">
+      <img src="{{url_for('static', filename='assets/logo.png')}}" alt="">
+      <h3>MovieMate</h3>
+    </div>
     The Holy Grail Layout with CSS Grid
     {%block header%} {%endblock%}
 

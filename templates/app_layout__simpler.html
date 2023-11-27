@@ -14,15 +14,22 @@
 
   <link href="https://fonts.googleapis.com/css2" />
   <script src="https://kit.fontawesome.com/1b04830cf2.js" crossorigin="anonymous"></script>
-
+  {%endblock%}
   <link rel="stylesheet" href="{{url_for('static', filename='css/layout_simple.css')}}" />
-  {%endblock%} {%block css%}{%endblock%}
+  {%block css%}{%endblock%}
 </head>
 
 <body class="container">
   <!-- HEADER -->
 
   <div class="header">
+    <div href="/" class="logo_container">
+      <img href="/" class="logo" src="{{url_for('static', filename='assets/logo.png')}}" alt="MovieMate Logo">
+      <span href="/" class="logo_text">
+        MovieMate
+      </span>
+
+    </div>
     {%block header%}<h1>This is the header of a Holy Grail Layout.</h1>{%endblock%}
   </div>
   <!-- SIDEBAR -->
@@ -60,5 +67,17 @@
     <h2>This is the footer.</h2>
   </div>
 </body>
+
+<script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+</script>
 
 </html>

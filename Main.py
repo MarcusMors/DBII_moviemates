@@ -27,11 +27,10 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('layout__simpler.html')
+    return render_template('app_layout__simpler.html')
 
 @app.route('/test_nested')
 def test_nested():
-    # return render_template('layout__nested.html')
     return render_template('app_layout.html')
 
 
