@@ -27,10 +27,11 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('layout__simpler.html')
+    return render_template('app_layout__simpler.html')
 
 @app.route('/test_nested', methods=['GET', 'POST'])
 def test_nested():
+<<<<<<< HEAD
     if request.method == 'POST':
         genre = request.form.get('genre', '')
         title = request.form.get('title', '')
@@ -65,6 +66,9 @@ def test_nested():
         return render_template('app_layout.html', results=results)
 
     return render_template('app_layout.html', results=None)
+=======
+    return render_template('app_layout.html')
+>>>>>>> fd13fdd4ee0399eef2ecd9ef3551d8dc336bf4a3
 
 
 @app.route('/execute_query', methods=['POST'])
