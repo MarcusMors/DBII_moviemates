@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{%block title%}{%endblock%}</title>
+  {%block head%}
+  <meta charset="UTF-8" />
+  <meta name="description" content="" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="../assets/icon.png" />
+  <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}" />
+
+  <link href="https://fonts.googleapis.com/css2" />
+  <script src="https://kit.fontawesome.com/1b04830cf2.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{{url_for('static', filename='css/layout_simple.css')}}" />
+  {%endblock%} {%block css%}{%endblock%}
+</head>
+
+<body class="container">
+  <!-- HEADER -->
+
+  <div class="header">
+    {%block header%}<h1>This is the header of a Holy Grail Layout.</h1>{%endblock%}
+  </div>
+  <!-- SIDEBAR -->
+  <div class="menu">
+    {%block sidebar%}
+    <h2>Categorias</h2>
+    <ul>
+      <li><a href="">Electrónicos</a></li>
+      <li><a href="">Computadoras</a></li>
+      <li><a href="">Smart Home</a></li>
+      <li><a href="">Arte y Artesanías</a></li>
+      <li><a href="">Insumos para mascotas</a></li>
+    </ul>
+    {%endblock%}
+  </div>
+  <!-- CONTENIDO -->
+
+  <div class="main">
+    {%block content%}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempus nibh a condimentum gravida. Donec
+      accumsan ipsum ac tincidunt scelerisque. Integer maximus malesuada vulputate. Mauris cursus enim nec vulputate
+      rhoncus. Fusce eu dignissim enim. Phasellus dictum varius justo a accumsan. Donec bibendum varius pretium.
+      Suspendisse aliquam vulputate lorem eu fermentum. Sed blandit porttitor ex ut laoreet. Nulla laoreet velit sed
+      dolor feugiat, ut condimentum felis tincidunt. Donec pretium est eget neque ultricies, eu vehicula felis
+      condimentum. Aenean bibendum eu felis nec tincidunt. Aenean scelerisque dictum sollicitudin. Sed lacinia
+      ullamcorper velit, id volutpat nunc vestibulum sed.</p>
+    {%endblock%}
+  </div>
+
+  <div class="sidebar">
+    <p>This is the sidebar.</p>
+  </div>
+
+  <div class="footer">
+    <h2>This is the footer.</h2>
+  </div>
+</body>
+
+</html>

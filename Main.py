@@ -25,6 +25,15 @@ class Neo4jConnection:
 def index():
     return render_template('index.html')
 
+@app.route('/test')
+def test():
+    return render_template('layout__simpler.html')
+
+@app.route('/test_nested')
+def test_nested():
+    # return render_template('layout__nested.html')
+    return render_template('app_layout.html')
+
 
 @app.route('/execute_query', methods=['POST'])
 def execute_query():
