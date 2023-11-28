@@ -1,7 +1,7 @@
 # import json
 # import os
 
-from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 from flask_cors import CORS
 from neo4j import GraphDatabase
 
@@ -99,11 +99,7 @@ def get_rand_movies():
             ]
 
     connection.close()
-    # print(results)
-    # request_data = request.get_json()
     answer["movies"] = results
-    print(answer["movies"])
-    print("Hola, se hizo un query")
     return answer
 
 
@@ -118,6 +114,7 @@ def header():
 @app.route("/test_nested")
 def test_nested():
     return render_template("app_layout.html")
+
 
 @app.route("/home")
 def test_end():
