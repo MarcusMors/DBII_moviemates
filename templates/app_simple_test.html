@@ -19,27 +19,6 @@
   {%block css%}{%endblock%}
 </head>
 
-<style>
-  /* Style for the dropdown */
-  .dropdown {
-      position: relative;
-      display: inline-block;
-  }
-
-  .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1;
-  }
-
-  .dropdown:hover .dropdown-content {
-      display: block;
-  }
-</style>
-
 <body class="container">
   <!-- HEADER -->
 
@@ -112,9 +91,7 @@
       condimentum. Aenean bibendum eu felis nec tincidunt. Aenean scelerisque dictum sollicitudin. Sed lacinia
       ullamcorper velit, id volutpat nunc vestibulum sed.</p>
     {%endblock%}
-    <div class="contents">
-      <div id="insert_guide" class="products"></div>
-    </div>
+
   </div>
 
   <div class="sidebar">
@@ -125,12 +102,11 @@
   </div>
 
   <div class="footer"id="load_signal">
-    <span>
-      <div href="/" class="logo_container">
-        <img href="/" class="logo" src="{{url_for('static', filename='assets/logo.png')}}" alt="MovieMate Logo">
-        <span href="/" class="logo_text">MovieMate</span>
-      </div>
-    </span>
+    <span><div href="/" class="logo_container">
+      <img href="/" class="logo" src="{{url_for('static', filename='assets/logo.png')}}" alt="MovieMate Logo">
+      <span href="/" class="logo_text">MovieMate</span>
+    </div></span>
+
     <ul>
       <li>About us</li>
       <li>Community</li>
@@ -146,8 +122,9 @@
     </ul>
   </div>
 </body>
+{%block scripts%}
 
-<script src="{{url_for('static', filename='js/infinite_loop.js')}}"></script>
+{%endblock%}
 
 <!-- <script>
   function openNav() {

@@ -18,18 +18,15 @@ const API = "http://localhost:5000/api/"
 let insert_guide_element = document.getElementById("insert_guide")
 
 function get_data() {
-  console.log("hola")
 	let request = API + "rand_movies"
 	fetch(request, {
 		method: "POST",
 		body: JSON.stringify({}),
 		headers: { "content-type": "application/json; charset=UTF-8" },
 	}).then(function (response) {
-      console.log(response);
 			return response.json()
 		})
 		.then(function (response) {
-			console.log(response)
 			let movies = response["movies"]
 
 			for (const movie of movies) {
@@ -49,11 +46,6 @@ function get_data() {
 					product_title,
 					product_poster
 				)
-
-        // plot
-        // title
-        // year
-        // poster // poster_url
 
 				product_title.append(movie["title"])
 				product_plot.append(movie["plot"])
