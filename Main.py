@@ -38,38 +38,6 @@ def test():
     return render_template("app_layout__simpler.html")
 
 
-"""
-"identity": 1215,
-"labels": [
-"Movie"
-],
-"properties": {
-"languages": [
-    "English"
-],
-"year": 1996,
-"imdbId": "0118064",
-"runtime": 100,
-"imdbRating": 6.8,
-"movieId": "1482",
-"countries": [
-    "UK",
-    " Ireland",
-    " USA"
-],
-"imdbVotes": 3407,
-"title": "Van, The",
-"url": "https://themoviedb.org/movie/11844",
-"tmdbId": "11844",
-"plot": "The third installment of Irish author Roddy Doyle's 'Barrytown Trilogy', following 'The Commitments' and 'The Snapper', depicts the hilarious yet poignant adventures of Bimbo. Upon being ...",
-"poster": "https://image.tmdb.org/t/p/w440_and_h660_face/A2wxXFnie5gvm0o2UX5IEtzOgZ4.jpg",
-"released": "1997-05-16"
-},
-"elementId": "1215"
-
-"""
-
-
 @app.route("/api/rand_movies", methods=["POST"])
 def get_rand_movies():
     answer = {"movies": "", "id": 200}  # Everything OK!
@@ -111,19 +79,57 @@ def header():
     return render_template("app_simple_test.html")
 
 
-@app.route("/test_nested")
-def test_nested():
-    return render_template("app_layout.html")
-
-
 @app.route("/home")
 def test_end():
     return render_template("home.html")
 
 
+@app.route("/test_nested", methods=["GET", "POST"])
+def test_nested():
+    if request.method == "POST":
+        genre = request.form.get("genre", "")
+        title = request.form.get("title", "")
+
+        if genre:
+            # Realiza la búsqueda por género
+            cypher_query = (
+                "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
+                "WHERE toLower(g.name) STARTS WITH toLower($genre) "
+                "RETURN m.title, m.poster"
+            )
+        elif title:
+            # Realiza la búsqueda por título
+            cypher_query = (
+                "MATCH (m:Movie) "
+                "WHERE toLower(m.title) CONTAINS toLower($title) "
+                "RETURN m.title, m.poster"
+            )
+
+        connection = Neo4jConnection(
+            "bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain"
+        )
+
+        with connection.connect() as driver:
+            with driver.session() as session:
+                if genre or title:
+                    result = session.run(cypher_query, genre=genre, title=title)
+                    results = [
+                        {"title": record["m.title"], "poster": record["m.poster"]}
+                        for record in result
+                    ]
+                else:
+                    results = []
+
+        connection.close()
+
+        return render_template("app_layout.html", results=results)
+
+    return render_template("app_layout.html", results=None)
+
+
 @app.route("/execute_query", methods=["POST"])
 def execute_query():
-    query = request.form["query"]
+    query = flask.request.form["query"]
     connection = Neo4jConnection(
         "bolt://44.197.239.196:7687", "neo4j", "recruit-presence-captain"
     )
