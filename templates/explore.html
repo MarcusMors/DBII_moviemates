@@ -1,0 +1,22 @@
+{%extends "app_layout__simpler.html"%}
+<!--  -->
+{%block title%}MovieMate{%endblock%}
+<!--  -->
+{%block css%}
+<link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}" />
+{%endblock%}
+
+{%block content%}
+
+
+<div class="contents">
+  <div id="insert_guide"></div>
+</div>
+
+{%endblock%}
+
+{%block scripts%}
+
+<script src="{{url_for('static', filename='js/explore_get_rand.js')}}"></script>
+
+{%endblock%}
