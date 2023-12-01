@@ -89,44 +89,95 @@ def aux():
 # def header():
 #     return render_template("app_simple_test.html")
 
+# def switch_g
+
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
     if request.method != "POST":
         return render_template("search.html", results=None)
 
-    genre = request.form.get("genre", "")
-    title = request.form.get("title", "")
+    print("POST method int home")
+    search_text = request.form["search_text"]
+    search_type = request.form["search_type"]
 
-    if genre:
-        # Realiza la búsqueda por género
-        cypher_query = (
-            "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
-            "WHERE toLower(g.name) STARTS WITH toLower($genre) "
-            "RETURN m.title, m.poster"
-        )
-    elif title:
-        # Realiza la búsqueda por título
-        cypher_query = (
+    print("search_text:", search_text)
+    print("search_type:", search_type)
+
+    if not search_text:
+        return render_template("search.html", results=None)
+
+    if search_type == "All":
+        pass
+    else:
+        pass
+
+    query_type = {
+        "All": (
             "MATCH (m:Movie) "
             "WHERE toLower(m.title) CONTAINS toLower($title) "
             "RETURN m.title, m.poster"
-        )
+        ),
+        "Person": 1,
+        "Community": 1,
+        "Titles": (
+            "MATCH (m:Movie) "
+            "WHERE toLower(m.title) CONTAINS toLower($title) "
+            "RETURN m.title, m.poster"
+        ),
+        "TV_eps": 1,
+        "Celebs": 1,
+        "Companies": 1,
+        "Genre": (
+            "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
+            "WHERE toLower(g.name) STARTS WITH toLower($genre) "
+            "RETURN m.title, m.poster"
+        ),
+    }
+
+    cypher_query = query_type[search_type]
+
+    # if genre:
+    #     # Realiza la búsqueda por género
+    #     cypher_query = (
+    # "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
+    # "WHERE toLower(g.name) STARTS WITH toLower($genre) "
+    # "RETURN m.title, m.poster"
+    #     )
+    # elif title:
+    #     # Realiza la búsqueda por título
+    #     cypher_query = (
+    #         "MATCH (m:Movie) "
+    #         "WHERE toLower(m.title) CONTAINS toLower($title) "
+    #         "RETURN m.title, m.poster"
+    #     )
 
     connection = Neo4jConnection()
 
+    # All
+    # Person
+    # Community
+    # Titles
+    # TV_eps
+    # Celebs
+    # Companies
+    # Genre
+
     with connection.connect() as driver:
         with driver.session() as session:
-            if genre or title:
-                result = session.run(cypher_query, genre=genre, title=title)
-                results = [
-                    {"title": record["m.title"], "poster": record["m.poster"]}
-                    for record in result
-                ]
-            else:
-                results = []
+            genre = search_text if search_type == "Genre" else None
+            title = None
+            if search_type != "Genre":
+                title = search_text
+
+            result = session.run(cypher_query, genre=genre, title=title)
+            results = [
+                {"title": record["m.title"], "poster": record["m.poster"]}
+                for record in result
+            ]
 
     connection.close()
+
     if not results:
         return render_template("empty_search.html", results=results)
 

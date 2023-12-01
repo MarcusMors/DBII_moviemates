@@ -10,6 +10,33 @@ html {
   --white: #f7f7f7;
 }
 
+.header_icon_container {
+  position: relative;
+  height: calc(100% - 10px);
+  /* width: calc(100% - 10px); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 5px 5px 5px;
+  /* border-radius: calc(40%); */
+}
+
+.header_icon_container:hover {
+  background-color: #333;
+}
+
+.header_icon_container::before {
+  content: "";
+  display: block;
+  padding-top: 100%; /* 1:1 aspect ratio */
+}
+
+.header_icon {
+  filter: brightness(100%);
+  min-width: 35px;
+  max-width: 1vw;
+}
+
 .logo_container {
   /* align-items: center; */
   display: table;
@@ -170,7 +197,12 @@ a {
  * navbar and search button
  *============================================================= */
 .search_bar_container {
-  /*  */
+  /* display: flex; */
+}
+
+.search_bar_container input {
+  /* display: flex; */
+  /* flex-grow: 1; */
 }
 
 form.nav_bar_form {
