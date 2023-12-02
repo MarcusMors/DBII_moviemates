@@ -1,0 +1,67 @@
+GET ALL RATINGS BY USER Omar Huffman
+    MATCH (me:User {name:'Omar Huffman'})-[my:RATED]->(m:Movie)
+    RETURN m.title, my.rating
+
+GET ALL RATINGS OF MOVIE Toy Story
+    MATCH (m:Movie {title:'Toy Story'})<-[r]-(u:User)
+    RETURN u.name AS username, r.rating AS stars
+
+
+GET ALL GENRES
+    MATCH (g:Genre)
+    RETURN properties(g) AS Genres
+    ORDER BY RAND()
+
+
+GET ALL MOVIES WITH THEIR GENRES ORDERED BY POPULARITY
+    MATCH (m:Movie)<-[r:RATED]-()
+    MATCH (m:Movie)-[IN_GENRE]->(g:Genre)
+    RETURN COUNT(r) AS N_of_reviews, m.title as Movie, COLLECT(DISTINCT g.name) as Genre
+    ORDER BY N_of_reviews DESC
+
+GET POPULAR MOVIES RECOMMENDED BASED ON GENRE
+    MATCH (m:Movie)<-[r:RATED]-()
+    MATCH (m:Movie)-[IN_GENRE]->(g:Genre )
+    WITH m, COLLECT(DISTINCT g.name) AS genres, COUNT(r) AS N_of_reviews
+    WHERE 'Comedy' IN genres
+    RETURN N_of_reviews, m.title AS Movie, genres
+    ORDER BY N_of_reviews DESC
+
+GET RECOMMENDED FRIENDS FOR Omar Huffman BASED ON SIMILAR RATINGS
+    MATCH (me:User {name: 'Omar Huffman'})-[my:RATED]->(m:Movie)
+    MATCH (other:User)-[their:RATED]->(m)
+    WHERE me <> other
+    AND abs(my.rating - their.rating) < 1
+    WITH other, COUNT(m) AS n, COLLECT(m.title) as Movies_in_common
+    RETURN other.name AS Friend_suggestion,n , Movies_in_common
+    ORDER BY n DESC
+
+GET GENRES BASED ON POPULARITY
+    MATCH (m:Movie)-[:IN_GENRE]->(g:Genre)
+    MATCH (u:User)-[r:RATED]->(m)
+    RETURN g.name AS Genre, COUNT(r) AS ReviewCount
+    ORDER BY ReviewCount DESC
+
+GET POPULAR MOVIES BY YEARS
+    MATCH (m:Movie)-[:IN_GENRE]->(:Genre)
+    MATCH (u:User)-[r:RATED]->(m)
+    WITH m, r, toString(m.year) AS releaseYear
+    WITH m, r, SUBSTRING(releaseYear, 0, 3) + '0s' AS Decade
+    WHERE Decade = '1970s'  // Replace '1980s' with the desired decade
+    RETURN m.title AS Movie, Decade, COUNT(r) AS ReviewCount
+    ORDER BY ReviewCount DESC
+
+GET RECOMMENDED MOVIES BY GENRE
+    MATCH (g:Genre {name: "Comedy"})-[IN_GENRE]-(m:Movie)
+    MATCH (a:Actor)-[ACTED_IN]-(m)
+    WITH m, COLLECT(a.name) AS actors
+    MATCH (d:Director)-[DIRECTED]-(m)
+    WITH m, COLLECT(d.name) AS directors, actors
+    MATCH (m)-[r:RATED]-()
+    MATCH (m)-[IN_GENRE]-(gs:Genre)
+    WITH m, COLLECT(DISTINCT gs.name) AS genres, COUNT(r) AS N_of_reviews, actors, directors
+    RETURN m.title as Movie, actors, directors, genres
+    ORDER BY N_of_reviews DESC
+    LIMIT 10
+
+GET RECOMMENDED MOVIES BY ACTOR

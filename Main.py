@@ -85,13 +85,6 @@ def aux():
 # return render_template("welcome.html", **context, user=data["username"], log=True)
 
 
-# @app.route("/header")
-# def header():
-#     return render_template("app_simple_test.html")
-
-# def switch_g
-
-
 @app.route("/home", methods=["GET", "POST"])
 def home():
     if request.method != "POST":
@@ -126,7 +119,11 @@ def home():
             "RETURN m.title, m.poster"
         ),
         "TV_eps": 1,
-        "Celebs": 1,
+        "Celebs": (
+            "MATCH (m:Person) "
+            "WHERE toLower(m.name) CONTAINS toLower($name) "
+            "RETURN m.name, m.poster"
+        ),
         "Companies": 1,
         "Genre": (
             "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
@@ -136,21 +133,6 @@ def home():
     }
 
     cypher_query = query_type[search_type]
-
-    # if genre:
-    #     # Realiza la búsqueda por género
-    #     cypher_query = (
-    # "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
-    # "WHERE toLower(g.name) STARTS WITH toLower($genre) "
-    # "RETURN m.title, m.poster"
-    #     )
-    # elif title:
-    #     # Realiza la búsqueda por título
-    #     cypher_query = (
-    #         "MATCH (m:Movie) "
-    #         "WHERE toLower(m.title) CONTAINS toLower($title) "
-    #         "RETURN m.title, m.poster"
-    #     )
 
     connection = Neo4jConnection()
 
@@ -170,11 +152,19 @@ def home():
             if search_type != "Genre":
                 title = search_text
 
-            result = session.run(cypher_query, genre=genre, title=title)
-            results = [
-                {"title": record["m.title"], "poster": record["m.poster"]}
-                for record in result
-            ]
+            if search_type == "Celebs":
+                name = search_text
+                result = session.run(cypher_query, name=name)
+                results = [
+                    {"title": record["m.name"], "poster": record["m.poster"]}
+                    for record in result
+                ]
+            else:
+                result = session.run(cypher_query, genre=genre, title=title)
+                results = [
+                    {"title": record["m.title"], "poster": record["m.poster"]}
+                    for record in result
+                ]
 
     connection.close()
 
@@ -182,11 +172,6 @@ def home():
         return render_template("empty_search.html", results=results)
 
     return render_template("search.html", results=results)
-
-
-# @app.route("/home")
-# def test_end():
-#     return render_template("home.html")
 
 
 @app.route("/test_nested", methods=["GET", "POST"])
@@ -232,14 +217,14 @@ def test_nested():
 
 @app.route("/execute_query", methods=["POST"])
 def execute_query():
-    query = flask.request.form["query"]
+    query = request.form["query"]
     connection = Neo4jConnection()
 
     with connection.connect() as driver:
         with driver.session() as session:
             result = session.run(query)
             results = [
-                {"title": record["title"], "poster": record["posterURL"]}
+                {"title": record["m.title"], "poster": record["m.poster"]}
                 for record in result
             ]
 
