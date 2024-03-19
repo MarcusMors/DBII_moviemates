@@ -1,0 +1,26 @@
+{%extends "app_layout__simpler.html"%}
+<!--  -->
+<!-- title should be the name of the movie -->
+{%block title%}MovieMate{%endblock%}
+<!--  -->
+{%block css%}
+<link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}" />
+{%endblock%}
+
+
+{%block content%}
+
+<!--
+title
+Director
+Year
+Time
+Rating
+
+ -->
+
+<div class="contents">
+  <div id="insert_guide"></div>
+</div>
+
+{%endblock%}

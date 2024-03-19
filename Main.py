@@ -13,11 +13,20 @@ CORS(app)
 class Neo4jConnection:
     def __init__(self, uri=None, user=None, pwd=None):
         if uri is None and user is None and pwd is None:
+            # previous
             [uri, user, pwd] = (
                 "bolt://44.197.239.196:7687",
                 "neo4j",
                 "recruit-presence-captain",
             )
+
+            # new
+            # [uri, user, pwd] = (
+            #     "bolt://44.192.99.46:7687",
+            #     "neo4j",
+            #     "tacks-waves-spiral",
+            # )
+
         self._uri = uri
         self._user = user
         self._password = pwd
@@ -100,11 +109,6 @@ def home():
     if not search_text:
         return render_template("search.html", results=None)
 
-    if search_type == "All":
-        pass
-    else:
-        pass
-
     query_type = {
         "All": (
             "MATCH (m:Movie) "
@@ -124,7 +128,7 @@ def home():
             "WHERE toLower(m.name) CONTAINS toLower($name) "
             "RETURN m.name, m.poster"
         ),
-        "Companies": 1,
+        # "Companies": 1,  # productoras (Fox, Warner Brothers, Dosney)
         "Genre": (
             "MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie) "
             "WHERE toLower(g.name) STARTS WITH toLower($genre) "
