@@ -1,9 +1,9 @@
 # import json
 # import os
-
 from flask import Flask, redirect, render_template, request, url_for
 from flask_cors import CORS
 from neo4j import GraphDatabase
+from neo4j.exceptions import AuthError, ConfigurationError, ServiceUnavailable
 
 app = Flask(__name__, template_folder="./templates", static_folder="./static")
 
@@ -12,12 +12,14 @@ CORS(app)
 
 class Neo4jConnection:
     def __init__(self, uri=None, user=None, pwd=None):
+
+        print("Creating Neo4j Connection")
         if uri is None and user is None and pwd is None:
             # previous
             [uri, user, pwd] = (
-                "bolt://44.197.239.196:7687",
+                "bolt://localhost:7687",
                 "neo4j",
-                "recruit-presence-captain",
+                "12345678",
             )
 
             # new
@@ -37,14 +39,28 @@ class Neo4jConnection:
             self._driver.close()
 
     def connect(self):
-        self._driver = GraphDatabase.driver(
-            self._uri, auth=(self._user, self._password)
-        )
-        return self._driver
+        try:
+            print("------- connecting to the database ----------")
+            self._driver = GraphDatabase.driver(
+                self._uri, auth=(self._user, self._password)
+            )
+            return self._driver
+        except ServiceUnavailable as e:
+            print(f"SSSSServiceUnavailable error: {e}")
+        except AuthError as e:
+            print(f"AAAAAuthentication error: {e}")
+        except ConfigurationError as e:
+            print(f"CCCCConfiguration error: {e}")
+        except Exception as e:
+            print(f"AAAAAn error occurred: {e}")
+        finally:
+            if 'driver' in locals():
+                self._driver.close()
 
 
 @app.route("/")
 def index():
+    print("asking root")
     return render_template("index.html")
 
 
@@ -238,4 +254,4 @@ def execute_query():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port=5001)
